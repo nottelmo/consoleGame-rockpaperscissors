@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Rock Paper Scissors on Browser Console!</title>
+    </head>
+
+    <body>
+
+    </body>
+
+    <script>
+        class RockPaperScissors{
+            constructor(){
+                this.computerScore = 0;
+                this.playerScore = 0;
+                this.round = 0;
+
+                this.welcomeMessage();
+            }
+
+            welcomeMessage(){
+                alert(`
+                To play this game, you must open you browser console.
+                On Desktop/Laptop, press F12 and select the Console tab`);
+                let promptStart = prompt(`
+                    Hi! Welcome to Rock Paper Scissors on Browser Console!\n
+                    You can restart the game by pressing [9] anytime!\n
+                    Start a new game by entering the letter S
+                `);
+
+                (promptStart === "S" || promptStart === "s") ? this.play() : this.welcomeMessage(); 
+            }
+
+            play(){
+                this.compare(this.computerPlay(), this.playerPlay());
+            }
+
+            playerPlay(){
+                let playerPrompt = prompt(`
+                    Pick a number to play:
+
+                        [1] Rock
+                        [2] Paper
+                        [3] Scissors
+
+                    [9] Restart Game
+                `, "");
+
+                return this.validatePlayerPlay(playerPrompt);
+            }
+
+            validatePlayerPlay(playerPlay){
+
+                playerPlay = parseInt(playerPlay);
+
+                if(playerPlay){
+                    if(playerPlay >= 1 && playerPlay <= 3){
+                        this.round++;
+                        return playerPlay;
+                    }else{
+                        if(playerPlay === 9){
+                            this.resetGame();
+                        }else{
+                            console.clear();
+                            console.warn("Pick a number between 0 and 3 to play || 9 to reset");
+                            this.play();
+                        }
+                    }
+                }else{
+                    console.clear();
+                    console.warn("You did not pick number");
+                    this.play();
+                }
+            }
+
+            printPlay(computerPlay, playerPlay){
+                console.log(`🎲 ROUND ${this.round}\n---------------------------\n👤 ${this.translateNumberToPlay(playerPlay)} | ${this.translateNumberToPlay(computerPlay)} 💻`);
+            }
+
+            printScore(){
+                console.log(`💯 SCORE\n👤 ${this.playerScore} | ${this.computerScore} 💻`);
+            }
+            
+
+            compare(computerPlay, playerPlay){
+                if(computerPlay == playerPlay){
+                    this.draw(computerPlay, playerPlay);
+                }else if((computerPlay == 1 && playerPlay == 2) ||
+                        (computerPlay == 2 && playerPlay == 3) ||
+                        (computerPlay == 3 && playerPlay == 1)
+                ){
+                    this.win(computerPlay, playerPlay);
+                }else if((computerPlay == 1 && playerPlay == 3) ||
+                        (computerPlay == 2 && playerPlay == 1) ||
+                        (computerPlay == 3 && playerPlay == 2)
+                ){
+                    this.lose(computerPlay, playerPlay);
+                }else{
+                    console.clear();
+                    console.error("Win condition Failed");
+                }
+            }
+
+            draw(computerPlay, playerPlay){
+                console.clear();
+                this.printPlay(computerPlay, playerPlay);
+                console.log("%c DRAW! ", "background-color: grey; color: white;");
+                this.printScore();
+                this.play();
+            }
+            win(computerPlay, playerPlay){
+                console.clear();
+                this.printPlay(computerPlay, playerPlay);
+                console.log("%c YOU WON! ", "background-color: green; color: white;");
+                this.playerScore++;
+                this.printScore();
+                this.play();
+            }
+            lose(computerPlay, playerPlay){
+                console.clear();
+                this.printPlay(computerPlay, playerPlay);
+                console.log("%c YOU LOST! ", "background-color: orange; color: white;");
+                this.computerScore++;
+                this.printScore();
+                this.play();
+            }
+
+            resetGame(){
+                this.computerScore = 0;
+                this.playerScore = 0;
+                this.round = 0;
+                
+                this.welcomeMessage();
+            }
+
+            translateNumberToPlay(num){
+                switch(num){
+                    case 0:
+                        this.resetGame();
+                    case 1:
+                        return "🪨 Rock";
+                        break;
+                    case 2:
+                        return "🧾 Paper";
+                        break;
+                    case 3:
+                        return "✂️ Scissors";
+                        break;
+                    default:
+                        console.log("Error. Not a number!");
+                }
+            }
+
+            computerPlay(){
+                let computerPlay = Math.ceil(Math.random()*3);
+                return computerPlay;
+            }
+        }
+
+        new RockPaperScissors();
+    </script>
+</html>
